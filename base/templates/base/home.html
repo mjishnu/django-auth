@@ -1,0 +1,26 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+  Welcome | ATG
+{% endblock %}
+
+{% block content %}
+  <div class="row justify-content-center">
+    <div class="col-md-8 text-center">
+      <h1 class="mb-3">Welcome to the Healthcare Portal</h1>
+      <p class="lead">Sign up to access personalized dashboards with your profile information.</p>
+      <div class="d-flex justify-content-center gap-3 mt-4">
+        {% if user.is_authenticated %}
+          <a class="btn btn-primary" href="{% url 'dashboard' %}">Go to Dashboard</a>
+          <form method="post" action="{% url 'logout' %}" class="d-inline ms-2">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-danger">Logout</button>
+          </form>
+        {% else %}
+          <a class="btn btn-primary" href="{% url 'signup' %}">Create Account</a>
+          <a class="btn btn-outline-light" href="{% url 'login' %}">Login</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

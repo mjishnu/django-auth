@@ -1,0 +1,53 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+  Dashboard
+{% endblock %}
+
+{% block content %}
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <h2 class="mb-4">
+        {% if request.user.user_type == 'doctor' %}
+          Welcome Dr. {{ request.user.last_name|default:request.user.username }}
+        {% else %}
+          Hello, {{ request.user.first_name|default:request.user.username }}!
+        {% endif %}
+      </h2>
+      <div class="card mb-3">
+        <div class="row g-0">
+          <div class="col-md-4 d-flex align-items-stretch p-3">
+            {% if request.user.profile_picture %}
+              <img src="{{ request.user.profile_picture.url }}" class="img-fluid rounded w-100 h-100 object-fit-cover" alt="Profile picture" style="max-height: 240px;" />
+            {% else %}
+              <div class="d-flex w-100 justify-content-center align-items-center bg-secondary rounded text-white" style="min-height: 200px;">
+                <div class="display-5 fw-bold">{{ request.user.first_name|default:request.user.username|slice:':1'|upper }}{{ request.user.last_name|slice:':1'|upper }}</div>
+              </div>
+            {% endif %}
+          </div>
+          <div class="col">
+            <div class="card-body">
+              <h5 class="card-title">
+                {% if request.user.user_type == 'doctor' %}
+                  Doctor Details
+                {% else %}
+                  Patient Details
+                {% endif %}
+              </h5>
+              <p class="card-text">
+                <strong>Name:</strong> {{ request.user.first_name }} {{ request.user.last_name }}<br />
+                <strong>Username:</strong> {{ request.user.username }}<br />
+                <strong>Email:</strong> {{ request.user.email }}<br />
+                <strong>Address:</strong> {{ request.user.address }}, {{ request.user.city }},
+                {{ request.user.state }} - {{ request.user.pincode }}
+              </p>
+              <p class="card-text">
+                <small class="text-muted">Role: {{ request.user.user_type|title }}</small>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
