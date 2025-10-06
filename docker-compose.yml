@@ -1,30 +1,40 @@
 services:
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_DATABASE: django
+      MYSQL_USER: django
+      MYSQL_PASSWORD: django
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-u", "root", "-proot" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    command: >
+      sh -c " python manage.py makemigrations && \
+              python manage.py migrate && \
+              python manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/app
     ports:
       - "8000:8000"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
-      - DB_NAME=postgres
-      - DB_USER=postgres
-      - DB_PASSWORD=postgres
+      - DB_NAME=django
+      - DB_USER=django
+      - DB_PASSWORD=django
       - DB_HOST=db
-      - DB_PORT=5432
-
-  db:
-    image: postgres:17.5-alpine
-    environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - DB_PORT=3306
 
 volumes:
-  postgres_data:
+  mysql_data:
