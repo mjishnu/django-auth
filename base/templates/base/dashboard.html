@@ -48,6 +48,33 @@
           </div>
         </div>
       </div>
+
+      {% if request.user.user_type == 'doctor' %}
+      <div class="card mt-4">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="card-title mb-0">My Blog Posts</h5>
+            <a class="btn btn-primary btn-sm" href="{% url 'create_blog' %}">+ New Post</a>
+          </div>
+          <ul class="list-unstyled mb-0">
+            {% for post in posts %}
+              <li class="mb-3">
+                <h6 class="mb-1">
+                  {{ post.title }} {% if post.is_draft %}<span class="badge text-bg-secondary">Draft</span>{% endif %}
+                </h6>
+                <div class="text-muted small mb-1">Category: {{ post.category.name }} • {{ post.created_at|date:"Y-m-d H:i" }}</div>
+                {% if post.image %}
+                  <img src="{{ post.image.url }}" alt="{{ post.title }}" class="img-fluid rounded mb-1" style="max-width:240px">
+                {% endif %}
+                <p class="mb-0">{{ post.summary|truncatewords:15 }}</p>
+              </li>
+            {% empty %}
+              <li class="text-muted">No posts yet.</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      {% endif %}
     </div>
   </div>
 {% endblock %}

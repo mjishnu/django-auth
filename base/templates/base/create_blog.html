@@ -1,0 +1,32 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+  Create Blog Post
+{% endblock %}
+
+{% block content %}
+  <h1>Create Blog Post</h1>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <div>
+      {{ form.title.label_tag }}<br />{{ form.title }} {{ form.title.errors }}
+    </div>
+    <div>
+      {{ form.image.label_tag }}<br />{{ form.image }} {{ form.image.errors }}
+    </div>
+    <div>
+      {{ form.category.label_tag }}<br />{{ form.category }} {{ form.category.errors }}
+    </div>
+    <div>
+      {{ form.is_draft.label_tag }}<br />{{ form.is_draft }} {{ form.is_draft.errors }}
+    </div>
+    <div>
+      {{ form.summary.label_tag }}<br />{{ form.summary }} {{ form.summary.errors }}
+    </div>
+    <div>
+      {{ form.content.label_tag }}<br />{{ form.content }} {{ form.content.errors }}
+    </div>
+    <button type="submit">Create</button>
+  </form>
+{% endblock %}

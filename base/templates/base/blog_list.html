@@ -1,0 +1,29 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+  Create Blog Post
+{% endblock %}
+
+{% block content %}
+  <h1>Blog</h1>
+  {% for category in categories %}
+    <section>
+      <h2>{{ category.name }}</h2>
+      <ul>
+        {% for post in category.public_posts %}
+          <li>
+            <h3>{{ post.title }}</h3>
+            {% if post.image %}
+              <div>
+                <img src="{{ post.image.url }}" alt="{{ post.title }}" style="max-width:240px" />
+              </div>
+            {% endif %}
+            <p>{{ post.summary|truncatewords:15 }}</p>
+          </li>
+        {% empty %}
+          <li>No posts yet.</li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endfor %}
+{% endblock %}

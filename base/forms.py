@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 
-from .models import User
+from .models import BlogPost, User
 
 
 class UserRegistrationForm(UserCreationForm):
@@ -43,3 +43,21 @@ class UserRegistrationForm(UserCreationForm):
         if email and User.objects.filter(email__iexact=email).exists():
             raise forms.ValidationError("A user with that email already exists.")
         return email
+
+
+class BlogPostForm(forms.ModelForm):
+    def __init__(self, *args, user, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._user = user
+
+    def save(self, commit=True):
+        obj = super().save(commit=False)
+        if not obj.pk:
+            obj.author = self._user
+        if commit:
+            obj.save()
+        return obj
+
+    class Meta:
+        model = BlogPost
+        fields = ["title", "image", "category", "is_draft", "summary", "content"]
