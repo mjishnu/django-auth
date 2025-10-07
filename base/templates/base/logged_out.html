@@ -6,9 +6,12 @@
 
 {% block content %}
   <div class="row justify-content-center">
-    <div class="col-md-6 text-center">
-      <h2 class="mb-4">You are now logged out.</h2>
-      <a class="btn btn-primary" href="{% url 'login' %}">Login again</a>
+    <div class="col-md-6">
+      <div class="card border-0 shadow-lg card-raise text-center p-5">
+        <h2 class="fw-semibold mb-2">You are now logged out.</h2>
+        <p class="text-muted mb-4">Thank you for using ATG Care.</p>
+        <a class="btn btn-primary px-4" href="{% url 'login' %}">Log back in</a>
+      </div>
     </div>
   </div>
 {% endblock %}

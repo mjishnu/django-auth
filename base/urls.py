@@ -6,8 +6,10 @@ from .views import (
     DashboardView,
     HomeView,
     SignupView,
-    create_blog,
+    blog_detail,
     blog_list,
+    create_blog,
+    edit_blog,
 )
 
 
@@ -18,5 +20,7 @@ urlpatterns = [
     path("logout/", CustomLogoutView.as_view(), name="logout"),
     path("dashboard", DashboardView.as_view(), name="dashboard"),
     path("blogs/new/", create_blog, name="create_blog"),
+    path("blogs/<int:pk>/edit/", edit_blog, name="edit_blog"),
+    path("blogs/<int:pk>/", blog_detail, name="blog_detail"),
     path("blogs/", blog_list, name="blog_list"),
 ]

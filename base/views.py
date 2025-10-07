@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.core.exceptions import PermissionDenied
 from django.db.models import Prefetch
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, TemplateView
 
@@ -14,6 +14,11 @@ from .models import BlogPost, Category, User
 
 class HomeView(TemplateView):
     template_name = "base/home.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect("dashboard")
+        return super().dispatch(request, *args, **kwargs)
 
 
 class SignupView(CreateView):
@@ -73,7 +78,62 @@ def create_blog(request):
             return redirect("dashboard")
     else:
         form = BlogPostForm(user=request.user)
-    return render(request, "base/create_blog.html", {"form": form})
+    return render(
+        request,
+        "base/blog_form.html",
+        {
+            "form": form,
+            "is_edit": False,
+        },
+    )
+
+
+@login_required
+def edit_blog(request, pk):
+    if request.user.user_type != User.UserTypes.DOCTOR:
+        raise PermissionDenied("Only doctors can edit blog posts.")
+
+    blog_post = get_object_or_404(BlogPost, pk=pk, author=request.user)
+
+    if request.method == "POST":
+        form = BlogPostForm(
+            request.POST,
+            request.FILES,
+            instance=blog_post,
+            user=request.user,
+        )
+        if form.is_valid():
+            form.save()
+            return redirect("dashboard")
+    else:
+        form = BlogPostForm(instance=blog_post, user=request.user)
+
+    return render(
+        request,
+        "base/blog_form.html",
+        {
+            "form": form,
+            "is_edit": True,
+            "blog_post": blog_post,
+        },
+    )
+
+
+def blog_detail(request, pk):
+    blog_post = get_object_or_404(
+        BlogPost.objects.select_related("author", "category"), pk=pk
+    )
+
+    if blog_post.is_draft:
+        if not request.user.is_authenticated or blog_post.author_id != request.user.id:
+            raise PermissionDenied("You do not have permission to view this post.")
+
+    context = {
+        "post": blog_post,
+        "is_author": request.user.is_authenticated
+        and blog_post.author_id == request.user.id,
+    }
+    return render(request, "base/blog_detail.html", context)
 
 
 def blog_list(request):

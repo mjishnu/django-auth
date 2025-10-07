@@ -5,22 +5,56 @@
 {% endblock %}
 
 {% block content %}
-  <div class="row justify-content-center">
-    <div class="col-md-8 text-center">
-      <h1 class="mb-3">Welcome to the Healthcare Portal</h1>
-      <p class="lead">Sign up to access personalized dashboards with your profile information.</p>
-      <div class="d-flex justify-content-center gap-3 mt-4">
-        {% if user.is_authenticated %}
-          <a class="btn btn-primary" href="{% url 'dashboard' %}">Go to Dashboard</a>
-          <form method="post" action="{% url 'logout' %}" class="d-inline ms-2">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-outline-danger">Logout</button>
-          </form>
-        {% else %}
-          <a class="btn btn-primary" href="{% url 'signup' %}">Create Account</a>
-          <a class="btn btn-outline-light" href="{% url 'login' %}">Login</a>
-        {% endif %}
+  <section class="row align-items-center justify-content-center g-4">
+    <div class="col-lg-6">
+      <div class="text-center text-lg-start">
+        <span class="badge bg-primary-subtle text-primary fw-semibold px-3 py-2 mb-3">Trusted healthcare companion</span>
+        <h1 class="display-5 fw-bold text-dark mb-3">Connect doctors and patients with clarity and care.</h1>
+        <p class="lead text-muted mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias possimus porro, qui odit id aspernatur sed.</p>
+        <div class="d-flex flex-column flex-sm-row gap-3">
+          <a class="btn btn-primary btn-lg px-4" href="{% url 'signup' %}">Create your account</a>
+          <a class="btn btn-outline-primary btn-lg px-4" href="{% url 'login' %}">Access portal</a>
+        </div>
       </div>
     </div>
-  </div>
+    <div class="col-lg-5">
+      <div class="card border-0 shadow-lg card-raise">
+        <div class="card-body p-4 p-lg-5">
+          <h2 class="h4 fw-semibold mb-3">Why ATG Care?</h2>
+          <ul class="list-unstyled mb-0 text-muted">
+            <li class="d-flex align-items-start mb-3"><span class="badge rounded-pill bg-primary me-3">1</span>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</li>
+            <li class="d-flex align-items-start mb-3"><span class="badge rounded-pill bg-primary me-3">2</span>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</li>
+            <li class="d-flex align-items-start"><span class="badge rounded-pill bg-primary me-3">3</span>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="row mt-5 g-4">
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm h-100 card-raise">
+        <div class="card-body p-4">
+          <h3 class="h5 fw-semibold">For Doctors</h3>
+          <p class="text-muted mb-0">Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel illum maiores aliquam.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm h-100 card-raise">
+        <div class="card-body p-4">
+          <h3 class="h5 fw-semibold">For Patients</h3>
+          <p class="text-muted mb-0">voluptates distinctio quasi ullam laboriosam incidunt labore iure eos nobis ducimus.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm h-100 card-raise">
+        <div class="card-body p-4">
+          <h3 class="h5 fw-semibold">Always Secure</h3>
+          <p class="text-muted mb-0">voluptatibus ipsam aliquid, quo nihil eveniet.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 {% endblock %}

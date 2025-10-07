@@ -49,6 +49,27 @@ class BlogPostForm(forms.ModelForm):
     def __init__(self, *args, user, **kwargs):
         super().__init__(*args, **kwargs)
         self._user = user
+        field_styles = {
+            "title": {
+                "class": "form-control",
+                "placeholder": "Enter an engaging title",
+            },
+            "image": {"class": "form-control"},
+            "category": {"class": "form-select"},
+            "summary": {
+                "class": "form-control",
+                "rows": 3,
+                "placeholder": "A concise overview",
+            },
+            "content": {
+                "class": "form-control",
+                "rows": 8,
+                "placeholder": "Write your full article here",
+            },
+        }
+        for name, attrs in field_styles.items():
+            self.fields[name].widget.attrs.update(attrs)
+        self.fields["is_draft"].widget.attrs.update({"class": "form-check-input"})
 
     def save(self, commit=True):
         obj = super().save(commit=False)
